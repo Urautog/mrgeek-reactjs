@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Advent+Pro:wght@200;400;700&family=Inter&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing:border-box;
+}
+
+body {
+    text-decoration: none;
+    max-width: 100%;
+}
+
+.container-home{
+    max-width: 100%;
+    box-shadow: 10px black;
+    background-color: #FFD4F8; 
+}
+
+.card {
+    border-radius: 20px;
+}
+
+.card-body{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.card-deck {
+    padding-top: 10px;
+    border-radius: 100px;
+    border-radius: 20px;
+}
+
+.carrossel {
+    padding-top: 10px;
+    padding-bottom: 50px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+border-radius: 50px;}
+
+.card-img-top{
+    border-radius: 20px
+}
+
+.row {
+    background-color: #FF00C8;
+}
+
+a {
+    color: #f8f9fa;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.bg-pink {
+    background-color: #FF00C8;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1ed08c;
+    border-color: #1ed08c;
+}
+
+form {
+    display: block;
+    margin-top: 0em;
+}
+
