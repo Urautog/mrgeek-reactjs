@@ -9,7 +9,7 @@ function MyOrderCard(props) {
 
   return (
     <Row className="orders-cards my-3 justify-content-center">
-      <Card class="item-lista">
+      <Card className="item-lista">
         <Col md={3} className="">
           <div class="numero-pedido">
             <Row>

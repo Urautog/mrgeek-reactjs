@@ -110,6 +110,13 @@ form .input-wrapper input {
   padding: 10px;
 }
 
+.checkout-card-text{
+  border-bottom: solid 3px;
+  border-color: #0db172;
+  padding: 2px;
+  margin: 2px 15px;
+}
+
 .favorites-cards > .card:hover {
   box-shadow: 4px 4px black;
   border: solid 2px black;

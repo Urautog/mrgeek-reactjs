@@ -6,6 +6,8 @@ import Table from 'react-bootstrap/Table';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 import Button from 'react-bootstrap/esm/Button';
+import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/esm/Container';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,15 +43,22 @@ function AdmProductsScreen() {
   }, []);
 
   return (
-    <div className="">
-      <h1 className="text-center">Produtos</h1>
-      <div className="">
-        {loading ? (
-          <LoadingBox />
-        ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <Row>
+    <Container className="my-3">
+      <Row className="justify-content-center">
+        <h1 className="text-center">Produtos</h1>
+        <Row className="my-3">
+          <Col className="text-center">
+            <Link to="/admin/new-product" className="">
+              <Button>Cadastrar Novo Produto</Button>
+            </Link>
+          </Col>
+        </Row>
+        <Row className="">
+          {loading ? (
+            <LoadingBox />
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
             <Col>
               <Table striped bordered hover variant="success" size="sm">
                 <thead className="text-center">
@@ -66,7 +75,7 @@ function AdmProductsScreen() {
                 </thead>
                 <tbody>
                   {products.map((product) => (
-                    <tr className="align-middle text-center">
+                    <tr className="align-middle text-center" key={product.id}>
                       <th>{product.id}</th>
                       <th>
                         <img
@@ -92,10 +101,10 @@ function AdmProductsScreen() {
                 </tbody>
               </Table>
             </Col>
-          </Row>
-        )}
-      </div>
-    </div>
+          )}
+        </Row>
+      </Row>
+    </Container>
   );
 }
 

@@ -17,6 +17,8 @@ import FavoritesScreen from './screens/FavoritesScreen';
 import AdmProductScreen from './screens/admin/AdmProductsScreen';
 import NewProduct from './screens/admin/NewProductScreen';
 import NewProductScreen from './screens/admin/NewProductScreen';
+import UsersScreen from './screens/admin/UsersScreen';
+import CheckoutScreen from './screens/CheckoutScreen';
 
 function App() {
   // const { state } = useContext(Store);
@@ -38,10 +40,12 @@ function App() {
               <Route path="/product/:id" element={<ProductScreen />} />
               <Route path="/" element={<HomeScreen />} />
               <Route path="/orders" element={<OrdersScreen />} />
+              <Route path="/checkout" element={<CheckoutScreen />} />
               <Route path="/favorites" element={<FavoritesScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/admin/products" element={<AdmProductScreen />} />
+              <Route path="/admin/users" element={<UsersScreen />} />
               <Route path="/admin/new-product" element={<NewProductScreen />} />
             </Routes>
           </Container>
