@@ -79,9 +79,10 @@ function AdmProductsScreen() {
                       <th>{product.id}</th>
                       <th>
                         <img
-                          height={70}
+                          height={100}
+                          width={100}
                           src={`../public/productsImages/${product.image}`}
-                          className="card-img-top mt-3"
+                          className="my-1"
                           alt={product.name}
                         ></img>
                       </th>
@@ -91,9 +92,11 @@ function AdmProductsScreen() {
                       <th>{product.stock}</th>
                       <th>{product.isActive ? 'Sim' : 'Não'}</th>
                       <th>
+                      <Link to={`/admin/products/update/${product.id}`}>
                         <Button variant="warning" className="m-2">
                           Editar
                         </Button>
+                        </Link>
                         <Button variant="danger">Excluir</Button>
                       </th>
                     </tr>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/esm/Button';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import axios from 'axios';
@@ -11,8 +11,7 @@ import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 import NewCategoryForm from '../../components/NewCategoryForm';
 
-function NewProductScreen() {
-  const navigate = useNavigate();
+function UpdateProductScreen() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [image, setImage] = useState(null);
@@ -21,8 +20,10 @@ function NewProductScreen() {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(null);
-  const [error, setError] = useState(false);
+  const [product, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState({});
+  const { id } = useParams();
 
   function getCategories() {
     axios
@@ -37,7 +38,21 @@ function NewProductScreen() {
       });
   }
 
+  function getProduct(id) {
+    axios
+      .get(`http://localhost:5000/products/${id}`)
+      .then((res) => {
+        setProduct(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setError(err);
+        console.log(err);
+      });
+  }
+
   useEffect(() => {
+    getProduct(id);
     getCategories();
     setLoading(false);
   }, []);
@@ -55,12 +70,11 @@ function NewProductScreen() {
       data.append('stock', stock);
       data.append('isActive', isActive);
 
-      await axios.post('http://localhost:5000/products/new', data, {
+      await axios.put(`http://localhost:5000/products/update/${id}`, data, {
         headers: {
           'Content-Type': 'multipart/ form-data',
         },
       });
-      navigate('/admin/products');
     } catch (error) {
       console.log(error);
     }
@@ -70,11 +84,11 @@ function NewProductScreen() {
     <>
       {loading ? (
         <LoadingBox />
-      ) : error ? (
+      ) : false ? (
         <MessageBox>Produto não encontrado</MessageBox>
       ) : (
         <Row className="my-3">
-          <h1 className="text-center mb-3">Cadastrar Produto</h1>
+          <h1 className="text-center mb-3">Atualizar Produto</h1>
           <section className="d-flex justify-content-center">
             <Form onSubmit={submitHandler} className="w-75">
               <Form.Group
@@ -89,6 +103,7 @@ function NewProductScreen() {
                   <Form.Control
                     type="text"
                     required
+                    defaultValue={product.name}
                     onChange={(e) => setName(e.target.value)}
                   />
                 </FloatingLabel>
@@ -103,6 +118,7 @@ function NewProductScreen() {
                     type="number"
                     step="0.01"
                     required
+                    defaultValue={product.price}
                     onChange={(e) => setPrice(e.target.value)}
                   />
                 </FloatingLabel>
@@ -120,6 +136,7 @@ function NewProductScreen() {
                   <Form.Control
                     type="file"
                     required
+                    defaultValue={product.image}
                     onChange={(e) => {
                       setImage(e.target.files[0]);
                     }}
@@ -128,20 +145,16 @@ function NewProductScreen() {
               </Form.Group>
 
               <Row className="select-wrapper">
-                <Col md={8}>
-                  <Form.Group controlId="category">
-                    {loading ? (
-                      <LoadingBox />
-                    ) : error ? (
-                      <MessageBox variant="danger">
-                        Categorias não encontradas
-                      </MessageBox>
-                    ) : (
+                {product && product.category && (
+                  <Col md={8}>
+                    <Form.Group controlId="category">
                       <FloatingLabel label="Categoria" controlId="category">
                         <Form.Select
                           onChange={(e) => setCategory(e.target.value)}
                         >
-                          <option>Selecione</option>
+                          <option defaultValue={product.category_id}>
+                            {product.category.name}
+                          </option>
                           {categories.map((category) => (
                             <option key={category.id} value={category.id}>
                               {category.name}
@@ -149,9 +162,9 @@ function NewProductScreen() {
                           ))}
                         </Form.Select>
                       </FloatingLabel>
-                    )}
-                  </Form.Group>
-                </Col>
+                    </Form.Group>
+                  </Col>
+                )}
                 <Col md={4} className="">
                   <NewCategoryForm />
                 </Col>
@@ -170,6 +183,7 @@ function NewProductScreen() {
                     type="number"
                     step="1"
                     required
+                    value={product.stock}
                     onChange={(e) => setStock(e.target.value)}
                   />
                 </FloatingLabel>
@@ -180,7 +194,9 @@ function NewProductScreen() {
                   id="custom-switch"
                   label="Ativo"
                   className="mb-3"
+                  // checked
                   onChange={(e) => setIsActive(e.target.value)}
+                  checked={product.isActive ? true : false}
                 />
               </Form.Group>
 
@@ -193,6 +209,7 @@ function NewProductScreen() {
                   <Form.Control
                     as="textarea"
                     placeholder=""
+                    value={product.description}
                     style={{
                       height: '100px',
                       border: 'solid 1px',
@@ -207,7 +224,7 @@ function NewProductScreen() {
                 <Button type="submit" className="mb-2 mx-5">
                   Cadastrar
                 </Button>
-                <Button type="reset" variant="danger" className="mb-2 mx-5">
+                <Button variant="danger" className="mb-2 mx-5">
                   Limpar
                 </Button>
               </div>
@@ -219,4 +236,4 @@ function NewProductScreen() {
   );
 }
 
-export default NewProductScreen;
+export default UpdateProductScreen;

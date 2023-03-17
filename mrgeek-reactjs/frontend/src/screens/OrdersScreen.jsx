@@ -3,7 +3,6 @@ import Col from 'react-bootstrap/esm/Col';
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/esm/Row';
 import Form from 'react-bootstrap/Form';
-import Card from 'react-bootstrap/Card';
 import MyOrderCard from '../components/MyOrderCard';
 
 function OrdersScreen() {
@@ -15,9 +14,8 @@ function OrdersScreen() {
           <Col md={6} className="w-50">
             <Form.Select
               name="filtro-pedidos"
-              class="filtro-pedidos seletor-filtros"
+              className="filtro-pedidos seletor-filtros success"
               id=""
-              className='success'
             >
               <option value="" selected disabled>
                 Filtrar por

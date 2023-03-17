@@ -5,124 +5,128 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 function Footer() {
   return (
-    <div className="d-flex justify-content-around bg-pink">
-      <Row >
-        <Container className="bg-pink text-white py-4">
+    <div className="bg-pink">
+      <Container className="bg-pink text-white py-4">
+        <Row>
           <Row>
-            <Col md={3} className='text-center px-4'>
+            <Col md={3} className="text-center px-4">
               <LinkContainer
                 to="/"
-                class="col-3 text-reset text-uppercase d-flex align-itens-center"
+                className="col-3 text-reset text-uppercase d-flex align-itens-center"
               >
                 <img
-                  height={100}
-                  width={100}
+                  // height={80}
+                  // width={80}
                   src="../public/img/MrGeek (2).png"
                   alt="Logo MRGeek"
-                  class="footer-logo"
+                  className="footer-logo m-auto"
                 />
               </LinkContainer>
             </Col>
-            <Col md={3} className='px-4'>
+            <Col md={3} className="px-4">
               <ul>
-                <li class="font-weight-bold text-uppercase">
+                <li className="font-weight-bold text-uppercase">
                   INFORMAÇÕES DA EMPRESA
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Sobre MrGeek
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Endereço
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Responsabilidade local
                   </a>
                 </li>
               </ul>
             </Col>
-            <Col md={3} className='px-4'>
+            <Col md={3} className="px-4">
               <ul>
-                <li class="font-weight-bold text-uppercase">AJUDA E SUPORTE</li>
+                <li className="font-weight-bold text-uppercase">
+                  AJUDA E SUPORTE
+                </li>
                 <li>
-                  <a href="/" class="col-3text-reset">
+                  <a href="/" className="col-3text-reset">
                     Política de frete
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Devolução
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Como pedir
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Como rastrear
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Guia de tamanhos
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Contate-nos
                   </a>
                 </li>
                 <li>
-                  <a href="/" class="text-reset">
+                  <a href="/" className="text-reset">
                     Método de pagamento
                   </a>
                 </li>
               </ul>
             </Col>
-            <Col md={3} className='px-4'>
+            <Col md={3} className="px-4">
               <ul>
-                <li class="font-weight-bold text-uppercase">REDES SOCIAIS</li>
+                <li className="font-weight-bold text-uppercase">
+                  REDES SOCIAIS
+                </li>
                 <li>
-                  <a href="/" class="text-reset">
-                    <i class="fa-brands fa-facebook"></i>
+                  <a href="/" className="text-reset">
+                    <i className="fa-brands fa-facebook"></i>
                   </a>
-                  <a href="/" class="text-reset">
-                    <i class="fa-brands fa-twitter"></i>
+                  <a href="/" className="text-reset">
+                    <i className="fa-brands fa-twitter"></i>
                   </a>
-                  <a href="/" class="text-reset">
-                    <i class="fa-brands fa-instagram"></i>
+                  <a href="/" className="text-reset">
+                    <i className="fa-brands fa-instagram"></i>
                   </a>
-                  <a href="/" class="text-reset">
-                    <i class="fa-brands fa-pinterest-p"></i>
+                  <a href="/" className="text-reset">
+                    <i className="fa-brands fa-pinterest-p"></i>
                   </a>
                 </li>
                 <form>
-                  <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">
+                  <div className="mb-3">
+                    <label htmlFor="exampleInputEmail1" className="form-label">
                       Cadastre-se para receber notificações
                     </label>
                     <input
                       type="email"
-                      class="form-control"
+                      className="form-control"
                       id="exampleInputEmail1"
                       aria-describedby="emailHelp"
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary">
+                  <button type="submit" className="btn btn-primary">
                     Inscreva-se
                   </button>
                 </form>
               </ul>
             </Col>
           </Row>
-        </Container>
-      </Row>
+        </Row>
+      </Container>
     </div>
   );
 }

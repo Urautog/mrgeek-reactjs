@@ -1,14 +1,13 @@
-import { useParams } from 'react-router-dom';
 import { useContext, useEffect, useReducer } from 'react';
-import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { Store } from '../Store';
 import { Helmet } from 'react-helmet-async';
+import axios from 'axios';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,8 +23,9 @@ const reducer = (state, action) => {
 };
 
 function ProductScreen() {
+  const navigate = useNavigate();
   const params = useParams();
-  const { id } = params;
+  const product_id = params.id;
   const [{ product }, dispatch] = useReducer(reducer, {
     product: [],
   });
@@ -33,7 +33,7 @@ function ProductScreen() {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const result = await axios.get(`/products/${id}`);
+        const result = await axios.get(`/products/${product_id}`);
         console.log(result.data);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (error) {
@@ -41,61 +41,60 @@ function ProductScreen() {
       }
     };
     fetchData();
-  }, [id]);
+  }, [product_id]);
 
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart } = state;
   const addToCartHandler = async () => {
-    const existItem = cart.cartItems.find((item) => item.id === product.id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/products/${id}`);
-    if (data.stock < quantity) {
-      window.alert('Produto sem estoque');
-      return;
-    }
-    ctxDispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quatity: 1 } });
+    axios.post(
+      `/cart/:${product_id}`,
+      {},
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
+    navigate('/cart');
+
   };
 
   return (
     <div>
-      <Container className="d-flex flex-column align-items-around">
+      <Container className="d-flex flex-column align-items-around my-3">
         <Helmet>
           <title>MrGeek | Produto</title>
         </Helmet>
 
         <Row className="mt-3">
-          <Col md={5} className="text-center mb-3">
+          <Col md={5} className="text-center mb-3 image-product-card">
             <img
               height={300}
               width={300}
               src={`../public/productsImages/${product.image}`}
               alt={product.image}
-              class="footer-logo"
+              className="footer-logo"
             />
           </Col>
-          <Col md={7}>
+          <Col md={7} className="card-price-product">
             <ListGroup variant="flush">
-              <ListGroup.Item>
+              <ListGroup.Item className="text-center">
                 <h1>{product.name}</h1>
               </ListGroup.Item>
-              <ListGroup.Item className='text-end'><h1>R${product.price}</h1></ListGroup.Item>
+              <ListGroup.Item className="text-center">
+                <h1>R${product.price}</h1>
+              </ListGroup.Item>
 
-              <span>
-                <strong>Estoque: </strong>
+              <span className="text-center">
+                <strong>Estoque </strong>
               </span>
               {product.stock > 0 ? (
-                <span>Dísponivel</span>
+                <span className="text-center">Dísponivel</span>
               ) : (
-                <span>Indisponível</span>
+                <span className="text-center">Indisponível</span>
               )}
 
               {product.stock > 0 && (
                 <ListGroup.Item>
-                  <div className="d-flex flex-column w-100">
+                  <div className="d-flex flex-column w-100 px-5">
                     <Button className="mb-2" onClick={addToCartHandler}>
                       Adicionar ao Carrinho
                     </Button>
-                    <Button>Favoritos</Button>
+                    <Button>Adicionar aos Favoritos</Button>
                   </div>
                 </ListGroup.Item>
               )}

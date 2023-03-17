@@ -19,6 +19,9 @@ import NewProduct from './screens/admin/NewProductScreen';
 import NewProductScreen from './screens/admin/NewProductScreen';
 import UsersScreen from './screens/admin/UsersScreen';
 import CheckoutScreen from './screens/CheckoutScreen';
+import UpdateProductScreen from './screens/admin/UpdateProductScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import CartScreen from './screens/CartScreen';
 
 function App() {
   // const { state } = useContext(Store);
@@ -36,15 +39,21 @@ function App() {
         <main className="bg-light-pink">
           <Container>
             <Routes>
+              <Route path="/profile" element={<ProfileScreen />} />
               <Route path="/products" element={<ProductsScreen />} />
               <Route path="/product/:id" element={<ProductScreen />} />
               <Route path="/" element={<HomeScreen />} />
               <Route path="/orders" element={<OrdersScreen />} />
               <Route path="/checkout" element={<CheckoutScreen />} />
+              <Route path="/cart" element={<CartScreen />} />
               <Route path="/favorites" element={<FavoritesScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/admin/products" element={<AdmProductScreen />} />
+              <Route
+                path="/admin/products/update/:id"
+                element={<UpdateProductScreen />}
+              />
               <Route path="/admin/users" element={<UsersScreen />} />
               <Route path="/admin/new-product" element={<NewProductScreen />} />
             </Routes>

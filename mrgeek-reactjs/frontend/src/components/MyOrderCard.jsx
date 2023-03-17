@@ -1,17 +1,15 @@
-import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 
 function MyOrderCard(props) {
-  const { order } = props;
+  // const { order } = props;
 
   return (
     <Row className="orders-cards my-3 justify-content-center">
       <Card className="item-lista">
         <Col md={3} className="">
-          <div class="numero-pedido">
+          <div className="numero-pedido">
             <Row>
               <strong>Número do pedido</strong>
             </Row>
@@ -21,7 +19,7 @@ function MyOrderCard(props) {
           </div>
         </Col>
         <Col md={3}>
-          <div class="status-pedido">
+          <div className="status-pedido">
             <Row>
               <strong>Status</strong>
             </Row>
@@ -31,7 +29,7 @@ function MyOrderCard(props) {
           </div>
         </Col>
         <Col md={3}>
-          <div class="data-pedido">
+          <div className="data-pedido">
             <Row>
               <strong>Data</strong>
             </Row>
@@ -41,7 +39,7 @@ function MyOrderCard(props) {
           </div>
         </Col>
         <Col md={3}>
-          <div class="pagamento-pedido">
+          <div className="pagamento-pedido">
             <Row>
               <strong>Pagamento</strong>
             </Row>

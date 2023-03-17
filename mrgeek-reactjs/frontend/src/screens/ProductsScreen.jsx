@@ -1,10 +1,12 @@
 import { useEffect, useReducer } from 'react';
-import axios from 'axios';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ProductCard from '../components/ProductCard';
+import axios from 'axios';
+
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
+import ProductCard from '../components/ProductCard';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -40,7 +42,7 @@ function ProductsScreen() {
   }, []);
 
   return (
-    <div className="">
+    <Container className="my-3">
       <h1 className="text-center">Produtos</h1>
       <div className="">
         {loading ? (
@@ -49,15 +51,17 @@ function ProductsScreen() {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <Row className="justify-content-center">
-            {products.map((product) => (
-              <Col key={product.id} sm={6} md={4} lg={3} className="mb-3">
-                <ProductCard product={product}></ProductCard>
-              </Col>
-            ))}
+            {products.map((product) => {
+              return (
+                <Col key={product.id} sm={6} md={4} lg={3} className="mb-3">
+                  <ProductCard product={product}></ProductCard>
+                </Col>
+              );
+            })}
           </Row>
         )}
       </div>
-    </div>
+    </Container>
   );
 }
 

@@ -2,7 +2,7 @@ import Alert from 'react-bootstrap/Alert';
 
 function MessageBox(props) {
   return (
- <Alert variant={props.variant || 'info'}>{props.childre}</Alert>
+ <Alert variant={props.variant || 'info'}>{props.children}</Alert>
   );
 }
 

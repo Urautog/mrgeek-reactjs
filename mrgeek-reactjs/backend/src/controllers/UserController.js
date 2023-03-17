@@ -1,19 +1,20 @@
-const { validationResult } = require('express-validator');
-const { User, Address } = require('../models');
+const { User, Address, Cart } = require('../models');
 const { randomUUID } = require('crypto');
 const bcrypt = require('bcryptjs');
 
 const UserController = {
-  showMeusPedidos: (req, res) => {
-    res.render('meus-pedidos');
+  index: async (req, res) => {
+    const users = await User.findAll();
+    res.json(users);
   },
-  showFavoritos: (req, res) => {
-    res.render('favoritos');
+  destroy: async (req, res) => {
+    const { id } = req.params;
+    User.destroy({ where: { id: id } });
   },
   showMeusDados: (req, res) => {
     res.render('meus-dados');
   },
-  createUser: async (req, res) => {
+  new: async (req, res) => {
     if (req.body.firstName && req.body.password) {
       const {
         firstName,
@@ -50,7 +51,12 @@ const UserController = {
         complement,
         user_id: userUUID,
       });
-      res.json({message: 'Sucesso'});
+      // await Cart.create({
+      //   id: randomUUID(),
+      //   user_id: userUUID,
+      //   product_id,
+      // });
+      res.json({ message: 'Sucesso' });
     } else {
       res.send('Não adicionado');
     }
@@ -64,15 +70,3 @@ const UserController = {
 };
 
 module.exports = UserController;
-
-// createUser: (req, res) => {
-//   const resultValidations = validationResult(req);
-
-//   if (resultValidations.errors.length > 0) {
-//     console.log(req);
-//     return res.render("cadastro", {
-//       errors: resultValidations.mapped(),
-//       oldData: req.body,
-//     });
-//   }
-// },
