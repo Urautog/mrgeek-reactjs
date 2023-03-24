@@ -22,47 +22,56 @@ import CheckoutScreen from './screens/CheckoutScreen';
 import UpdateProductScreen from './screens/admin/UpdateProductScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import CartScreen from './screens/CartScreen';
+import AuthProvider from './contexts/AuthContext';
+import ProtectedRoutes from './components/ProtectedRoutes';
 
 function App() {
-  // const { state } = useContext(Store);
-  // const { cart } = state;
-
   return (
     <BrowserRouter>
       <Helmet>
         <title>MrGeek | Home</title>
       </Helmet>
-      <div className="d-flex flex-column site-container">
-        <header>
-          <Header />
-        </header>
-        <main className="bg-light-pink">
-          <Container>
-            <Routes>
-              <Route path="/profile" element={<ProfileScreen />} />
-              <Route path="/products" element={<ProductsScreen />} />
-              <Route path="/product/:id" element={<ProductScreen />} />
-              <Route path="/" element={<HomeScreen />} />
-              <Route path="/orders" element={<OrdersScreen />} />
-              <Route path="/checkout" element={<CheckoutScreen />} />
-              <Route path="/cart" element={<CartScreen />} />
-              <Route path="/favorites" element={<FavoritesScreen />} />
-              <Route path="/register" element={<RegisterScreen />} />
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/admin/products" element={<AdmProductScreen />} />
-              <Route
-                path="/admin/products/update/:id"
-                element={<UpdateProductScreen />}
-              />
-              <Route path="/admin/users" element={<UsersScreen />} />
-              <Route path="/admin/new-product" element={<NewProductScreen />} />
-            </Routes>
-          </Container>
-        </main>
-        <footer>
-          <Footer></Footer>
-        </footer>
-      </div>
+      <AuthProvider>
+        <div className="d-flex flex-column site-container">
+          <header>
+            <Header />
+          </header>
+          <main className="bg-light-pink">
+            <Container>
+              <Routes>
+                <Route path="/profile" element={<ProfileScreen />} />
+                <Route path="/products" element={<ProductsScreen />} />
+                <Route path="/product/:id" element={<ProductScreen />} />
+                <Route path="/" element={<HomeScreen />} />
+                <Route path="/orders" element={<OrdersScreen />} />
+                <Route path="/checkout" element={<CheckoutScreen />} />
+                <Route path="/cart" element={<CartScreen />} />
+                <Route path="/favorites" element={<FavoritesScreen />} />
+                <Route path="/register" element={<RegisterScreen />} />
+                <Route path="/login" element={<LoginScreen />} />
+                <Route path="/" element={<ProtectedRoutes />}>
+                  <Route
+                    path="admin/products"
+                    element={<AdmProductScreen />}
+                  />
+                  <Route
+                    path="admin/products/update/:id"
+                    element={<UpdateProductScreen />}
+                  />
+                  <Route path="/admin/users" element={<UsersScreen />} />
+                  <Route
+                    path="admin/new-product"
+                    element={<NewProductScreen />}
+                  />
+                </Route>
+              </Routes>
+            </Container>
+          </main>
+          <footer>
+            <Footer></Footer>
+          </footer>
+        </div>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

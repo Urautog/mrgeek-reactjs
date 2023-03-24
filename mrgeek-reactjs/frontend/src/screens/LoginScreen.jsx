@@ -1,23 +1,22 @@
-import axios from 'axios';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../contexts/AuthContext';
+import MessageBox from '../components/MessageBox';
 
 function LoginScreen() {
+  // const navigate = useNavigate();
+  const context = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await axios.post('/login', {
-        email,
-        password,
-      });
-    } catch (error) {}
+    context.login(email, password);
   };
 
   return (
@@ -27,6 +26,7 @@ function LoginScreen() {
           <title>MrGeek | Login</title>
         </Helmet>
         <h1 className=" text-center my-3">LOGIN</h1>
+        {context.loginFailed ? <MessageBox /> : null}
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3 input-wrapper" controlId="email">
             <Form.Label>Email</Form.Label>
@@ -49,7 +49,9 @@ function LoginScreen() {
               Entrar
             </Button>
             <Button className="mx-3 w-25">
-              <Link to="/register" className='text-decoration-none text-reset'>Cadastrar</Link>
+              <Link to="/register" className="text-decoration-none text-reset">
+                Cadastrar
+              </Link>
             </Button>
           </div>
         </Form>

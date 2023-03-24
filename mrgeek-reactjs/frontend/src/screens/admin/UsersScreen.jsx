@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,13 +11,16 @@ import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 
 function UsersScreen() {
+  const navigate = useNavigate();
+
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(false);
 
-  function deleteUser(id) {
-    axios.delete(`/admin/delete/${id}`);
-  }
+  // function deleteUser(e, id) {
+  // e.preventDefault();
+  //   axios.delete(`/admin/delete/${id}`);
+  // }
 
   function getUsers() {
     axios
@@ -68,7 +71,16 @@ function UsersScreen() {
                       <th>{user.tel}</th>
                       <th>{user.isAdmin ? 'Sim' : 'Não'}</th>
                       <th>
-                        <Button variant="danger" onClick={deleteUser(user.id)}>
+                        <Button
+                          variant="danger"
+                          onClick={() => {
+                            axios
+                              .delete(`/admin/delete/${user.id}`)
+                              .then(() => {
+                                navigate('/admin/users');
+                              });
+                          }}
+                        >
                           Excluir
                         </Button>
                       </th>

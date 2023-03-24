@@ -1,48 +1,63 @@
-const { User } = require("../models");
-const bcrypt = require("bcryptjs");
+const { User } = require('../models');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const AuthController = {
   showCadastro: (req, res) => {
-    res.render("cadastro");
+    res.render('cadastro');
   },
 
   showLogin: (req, res) => {
-    res.render("login");
+    res.render('login');
   },
 
-  // store: (req, res) => {
-  //   const { name, email, password } = req.body;
-
-  //   const verifyExists = User.findOne( {where: { email: email } } );
-
-  //   if (!verifyExists) {
-  //     return res.render("cadastro", {
-  //       error: "Não foi possivel realizar a operação",
-  //     });
-  //   }
-
-  //   const hash = bcrypt.hashSync(password, 10);
-
-  //   const newUser = { name, email, hash };
-
-  //   User.create(newUser);
-
-  //   return res.redirect("/auth/login");
-  // },
-
   login: async (req, res) => {
-    const { email, password } = req.body;
+    try {
+      const { email, password } = req.body;
 
-    const user = await User.findOne({where: { email: email } });
-    const verifyPassword = bcrypt.compareSync(password, user.password);
+      const user = await User.findOne({ where: { email } });
 
-    if (!user || !verifyPassword) {
-      return res.render("login", { error: "Email ou senha inválidos" });
+      if (!user || !bcrypt.compareSync(password, user.password)) {
+        return res.status(400).json({ message: 'Usuário ou senha inválidos!' });
+      }
+
+      const data = {
+        id: user.id,
+        name: user.firstName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      };
+
+      const token = jwt.sign(data, process.env.JWT_KEY, { expiresIn: '1 day' });
+
+      return res
+        .status(200)
+        .json({ user: data, token, message: 'Autenticado' });
+    } catch (error) {
+      if (error.name === 'SequelizeConnectionRefusedError') {
+        return res.status(500).json({
+          error: true,
+          message: 'Sistema indisponível, tente novamente mais tarde!',
+        });
+      }
+
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return res.status(400).json(error.parent.sqlMessage);
+      }
+
+      if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json({
+          error: true,
+          message: `${error.errors[0].type} at ${error.errors[0].path}`,
+        });
+      }
+
+      return res.status(400).json({
+        error: true,
+        message: 'Falha na requisição, tente novamente!',
+      });
     }
-
-    req.session.user = user;
-
-    return res.redirect("/");
   },
 };
 
