@@ -8,6 +8,7 @@ import MessageBox from '../../components/MessageBox';
 import Button from 'react-bootstrap/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
+import { formatValue } from 'react-currency-input-field';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -90,7 +91,13 @@ function AdmProductsScreen() {
                       </th>
                       <th>{product.name}</th>
                       <th>{product.description}</th>
-                      <th>{product.price}</th>
+                      <th>
+                        {formatValue({
+                          value: product.price.toString(),
+                          intlConfig: { locale: 'pt-BR', currency: 'BRL' },
+                          decimalScale: '2',
+                        })}
+                      </th>
                       <th>{product.category.name}</th>
                       <th>{product.stock}</th>
                       <th>{product.isActive ? 'Sim' : 'Não'}</th>

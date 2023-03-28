@@ -6,16 +6,19 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import axios from 'axios';
+import Toast from 'react-bootstrap/Toast';
 
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 import NewCategoryForm from '../../components/NewCategoryForm';
 
 function UpdateProductScreen() {
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
+
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  // const [image, setImage] = useState(null);
   const [stock, setStock] = useState('');
   const [isActive, setIsActive] = useState('');
   const [description, setDescription] = useState('');
@@ -74,18 +77,20 @@ function UpdateProductScreen() {
       const data = new FormData();
 
       data.append('name', name);
-      // data.append('image', image);
       data.append('description', description);
       data.append('price', price);
       data.append('category', category);
       data.append('stock', stock);
       data.append('isActive', isActive);
 
-      await axios.put(`http://localhost:5000/products/update/${id}`, data, {
-        headers: {
-          'Content-Type': 'multipart/ form-data',
-        },
-      });
+      await axios
+        .put(`http://localhost:5000/products/update/${id}`, data, {
+          headers: {
+            'Content-Type': 'multipart/ form-data',
+          },
+        })
+        .then(toggleShowA())
+        .then(navigate('/admin/products'));
       navigate('/admin/products');
     } catch (error) {
       console.log(error);
@@ -100,6 +105,16 @@ function UpdateProductScreen() {
         <MessageBox>Produto não encontrado</MessageBox>
       ) : (
         <Row className="my-3">
+          <Toast
+            show={showA}
+            onClose={toggleShowA}
+            delay={2000}
+            autohide
+            bg="warning"
+            className="mx-auto text-center"
+          >
+            <Toast.Body>Produto atualizado!</Toast.Body>
+          </Toast>
           <h1 className="text-center mb-3">Atualizar Produto</h1>
           <section className="d-flex justify-content-center">
             <Form onSubmit={submitHandler} className="w-75">
@@ -135,27 +150,6 @@ function UpdateProductScreen() {
                   />
                 </FloatingLabel>
               </Form.Group>
-
-              {/* <Form.Group
-                controlId="image"
-                className="my-3 text-center input-wrapper"
-              >
-                <FloatingLabel
-                  label="Imagem"
-                  className="mb-3"
-                  controlId="image"
-                >
-                  <Form.Control
-                    type="file"
-                    required
-                    defaultValue={product.image}
-                    onChange={(e) => {
-                      setImage(e.target.files[0]);
-                    }}
-                  />
-                </FloatingLabel>
-              </Form.Group> */}
-
               <Row className="select-wrapper">
                 {product && product.category && (
                   <Col md={8}>
