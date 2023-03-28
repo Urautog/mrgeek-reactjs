@@ -7,6 +7,7 @@ import MessageBox from '../components/MessageBox';
 // import { useJwt } from 'react-jwt';
 import { useNavigate } from 'react-router-dom';
 import CurrencyInput from 'react-currency-input-field';
+import { formatValue } from 'react-currency-input-field';
 
 import axios from 'axios';
 
@@ -79,16 +80,11 @@ function CartScreen() {
                     </Col>
                     <Col md={3}>
                       <Card.Text>
-                        <CurrencyInput
-                          prefix="R$"
-                          allowDecimals={true}
-                          value={item.price}
-                          defaultValue={0}
-                          decimalsLimit={2}
-                          decimalSeparator=","
-                          fixedDecimalLength="2"
-                          style={{ border: 'none' }}
-                        />
+                        {formatValue({
+                          value: item.price.toString(),
+                          intlConfig: { locale: 'pt-BR', currency: 'BRL' },
+                          decimalScale: '2',
+                        })}
                       </Card.Text>
                     </Col>
                     <Col md={3}>
@@ -107,52 +103,42 @@ function CartScreen() {
             </Col>
             <Col md={4}>
               <Card style={{ border: '1px solid black' }}>
-                <Card.Title>Finalizar Pedido</Card.Title>
+                <Card.Title
+                  className="mt-3"
+                  style={{ fontSize: '1.5rem', fontWeight: 'bold' }}
+                >
+                  Finalizar Pedido
+                </Card.Title>
                 <Card.Body>
                   <Card.Text>
-                    Subtotal:
-                    <CurrencyInput
-                      prefix="R$"
-                      allowDecimals={true}
-                      value={items
+                    Subtotal:{' '}
+                    {formatValue({
+                      value: items
                         .map((item) => item.price)
-                        .reduce((prev, curr) => prev + curr, 0)}
-                      defaultValue={0}
-                      decimalsLimit={2}
-                      decimalSeparator=","
-                      fixedDecimalLength="2"
-                      style={{ border: 'none' }}
-                    />
+                        .reduce((prev, curr) => prev + curr, 0)
+                        .toString(),
+                      intlConfig: { locale: 'pt-BR', currency: 'BRL' },
+                      decimalScale: '2',
+                    })}
                   </Card.Text>
                   <Card.Text>
                     Frete:{' '}
-                    <CurrencyInput
-                      prefix="R$"
-                      allowDecimals={true}
-                      value={'12'}
-                      defaultValue={0}
-                      decimalsLimit={2}
-                      decimalSeparator=","
-                      fixedDecimalLength={2}
-                      style={{ border: 'none' }}
-                    />{' '}
+                    {formatValue({
+                      value: '12',
+                      intlConfig: { locale: 'pt-BR', currency: 'BRL' },
+                      decimalScale: '2',
+                    })}
                   </Card.Text>
-                  <Card.Text>
+                  <Card.Text style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>
                     Total:{' '}
-                    <CurrencyInput
-                      prefix="R$"
-                      allowDecimals={true}
-                      value={
-                        items
-                          .map((item) => item.price)
-                          .reduce((prev, curr) => prev + curr, 0) + 12
-                      }
-                      defaultValue={0}
-                      decimalsLimit={2}
-                      decimalSeparator=","
-                      fixedDecimalLength={2}
-                      style={{ border: 'none' }}
-                    />
+                    {formatValue({
+                      value: items
+                        .map((item) => item.price)
+                        .reduce((prev, curr) => prev + curr, 12)
+                        .toString(),
+                      intlConfig: { locale: 'pt-BR', currency: 'BRL' },
+                      decimalScale: '2',
+                    })}
                   </Card.Text>
                   <Button
                     onClick={() => {

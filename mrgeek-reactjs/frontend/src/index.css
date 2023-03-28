@@ -15,10 +15,14 @@ body {
   min-height: 100vh;
 }
 
+.product-card {
+  height: 100%;
+}
 
-
-.product-card{
-  min-height: 600px;
+.product-img {
+  max-height: 200px;
+  max-width: 200px;
+  min-height: 200px;
 }
 
 .nav-link {
@@ -146,9 +150,9 @@ form .input-wrapper input {
   transition: 300ms;
 }
 
-.logout-btn{
+.logout-btn {
   background-color: #ff00c8;
-  border: none
+  border: none;
 }
 
 /* CUSTOM COLORS */
