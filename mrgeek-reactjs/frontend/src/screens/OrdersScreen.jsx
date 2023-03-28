@@ -1,36 +1,44 @@
-import React from 'react';
-import Col from 'react-bootstrap/esm/Col';
-import Container from 'react-bootstrap/esm/Container';
-import Row from 'react-bootstrap/esm/Row';
-import Form from 'react-bootstrap/Form';
+import React, { useEffect, useState } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import MyOrderCard from '../components/MyOrderCard';
+import axios from 'axios';
+import MessageBox from '../components/MessageBox';
 
 function OrdersScreen() {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:5000/profile/orders', {
+        headers: {
+          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+        },
+      })
+      .then((res) => {
+        console.log('orders');
+        console.log(res.data);
+        setOrders(res.data);
+      });
+  }, []);
+
   return (
     <div>
-      <Container>
+      <Container className="d-flex flex-column ">
         <h1 className="text-center my-3">MEUS PEDIDOS</h1>
-        <Row>
-          <Col md={6} className="w-50">
-            <Form.Select
-              name="filtro-pedidos"
-              className="filtro-pedidos seletor-filtros success"
-              id=""
-            >
-              <option value="" selected disabled>
-                Filtrar por
-              </option>
-              <option value="Todos">Todos</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Cancelado">Cancelado</option>
-              <option value="Pendente">Pendente</option>
-            </Form.Select>
-          </Col>
-          <MyOrderCard />
-        </Row>
+        {orders && ( 
+          <Row>
+          {orders ? (
+            orders.map((order) => {
+              return <MyOrderCard order={order} />;
+            })
+          ):(<MessageBox variant='danger'>Você não possui pedidos!</MessageBox>)}
+            
+          </Row>
+        )}
 
         <img
-          className=""
+          className="mx-auto"
           id="teen-titans"
           src="../public/img/teen-titans.svg"
           alt=""

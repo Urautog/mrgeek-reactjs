@@ -62,10 +62,11 @@ function HomeScreen() {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <Row className="justify-content-center">
-            {products.map((product) => (
+            {products.map((product, index) => ( index < 4 ? (
               <Col key={product.id} sm={6} md={4} lg={3} className="mb-3">
                 <ProductCard product={product}></ProductCard>
               </Col>
+            ) : (null)
             ))}
           </Row>
         )}

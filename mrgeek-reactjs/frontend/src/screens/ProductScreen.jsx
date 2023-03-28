@@ -1,5 +1,5 @@
-import { useContext, useEffect, useReducer } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, useReducer, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -8,6 +8,10 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
+import { useJwt } from 'react-jwt';
+import Toast from 'react-bootstrap/Toast';
+import { LinkContainer } from 'react-router-bootstrap';
+import Nav from 'react-bootstrap/Nav';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -23,9 +27,16 @@ const reducer = (state, action) => {
 };
 
 function ProductScreen() {
-  const navigate = useNavigate();
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
+  const { decodedToken } = useJwt(sessionStorage.getItem('token'));
+
   const params = useParams();
   const product_id = params.id;
+  let [items, setItems] = useState(
+    JSON.parse(localStorage.getItem('items')) || []
+  );
+
   const [{ product }, dispatch] = useReducer(reducer, {
     product: [],
   });
@@ -44,14 +55,15 @@ function ProductScreen() {
   }, [product_id]);
 
   const addToCartHandler = async () => {
-    axios.post(
-      `/cart/:${product_id}`,
-      {},
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-    navigate('/cart');
-
+    setItems([...items, product]);
+    toggleShowA();
   };
+
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(items));
+
+    console.log(`Saved ${items.length} items to localstorage`);
+  }, [items]);
 
   return (
     <div>
@@ -59,6 +71,16 @@ function ProductScreen() {
         <Helmet>
           <title>MrGeek | Produto</title>
         </Helmet>
+        <Toast
+          show={showA}
+          onClose={toggleShowA}
+          delay={2000}
+          autohide
+          bg="warning"
+          className="mx-auto text-center"
+        >
+          <Toast.Body>Produto adicionado ao carrinho!</Toast.Body>
+        </Toast>
 
         <Row className="mt-3">
           <Col md={5} className="text-center mb-3 image-product-card">
@@ -91,10 +113,18 @@ function ProductScreen() {
               {product.stock > 0 && (
                 <ListGroup.Item>
                   <div className="d-flex flex-column w-100 px-5">
-                    <Button className="mb-2" onClick={addToCartHandler}>
-                      Adicionar ao Carrinho
-                    </Button>
-                    <Button>Adicionar aos Favoritos</Button>
+                    {decodedToken && (
+                      <Button className="mb-2" onClick={addToCartHandler}>
+                        Adicionar ao Carrinho
+                      </Button>
+                    )}
+                    {!decodedToken && (
+                  <LinkContainer to="/login">
+                    <Nav.Link>
+                      <Button className='w-100'>Login</Button>
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
                   </div>
                 </ListGroup.Item>
               )}

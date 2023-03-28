@@ -1,18 +1,15 @@
 import React, { createContext, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
   const [loginFailed, setLoginFailed] = useState(false);
-
-  console.log('user provider');
-  console.log(user);
-  console.log('token provider');
-  console.log(token);
 
   const login = async (email, password) => {
     try {
@@ -27,6 +24,7 @@ const AuthProvider = ({ children }) => {
       setToken(response.data.token);
       setAuthenticated(true);
       setLoginFailed(false);
+      navigate('/')
       return;
     } catch (error) {}
 
@@ -35,8 +33,10 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     sessionStorage.clear();
+    localStorage.clear();
     setUser(null);
     setToken(null);
+    navigate('/');
   };
 
   return (

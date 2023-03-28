@@ -1,34 +1,32 @@
 import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
-function MyOrderCard(props) {
-  // const { order } = props;
-
+function MyOrderCard({ order }) {
   return (
     <Row className="orders-cards my-3 justify-content-center">
       <Card className="item-lista">
-        <Col md={3} className="">
+        <Col md={6} className="">
           <div className="numero-pedido">
             <Row>
               <strong>Número do pedido</strong>
             </Row>
             <Row>
-              <span>#1234567890</span>
+              <span>{order.order_id}</span>
             </Row>
           </div>
         </Col>
-        <Col md={3}>
+        <Col md={6}>
           <div className="status-pedido">
             <Row>
               <strong>Status</strong>
             </Row>
             <Row>
-              <span>Concluído</span>
+              <span>{order.status}</span>
             </Row>
           </div>
         </Col>
-        <Col md={3}>
+        {/* <Col md={3}>
           <div className="data-pedido">
             <Row>
               <strong>Data</strong>
@@ -47,7 +45,7 @@ function MyOrderCard(props) {
               <span>Boleto Bancário</span>
             </Row>
           </div>
-        </Col>
+        </Col> */}
       </Card>
     </Row>
   );

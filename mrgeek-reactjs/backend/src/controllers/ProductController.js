@@ -6,7 +6,7 @@ const ProductsController = {
     const products = await Product.findAll({
       include: [
         { association: 'category', required: false },
-        { association: 'orders' },
+        // { association: 'orders' },
       ],
     });
     res.json(products);
@@ -40,28 +40,27 @@ const ProductsController = {
 
   update: async (req, res) => {
     const { id } = req.params;
-    const { name, description, image, price, category, stock, isActive } =
+    const { name, description, price, category, stock, isActive } =
       req.body;
     Product.update(
       {
         name,
-        image,
         description,
         price,
         category_id: category,
         stock,
-        isActive: isActive == 'on' ? true : false,
+        isActive: true,
+        // isActive: isActive == 'on' ? true : false,
       },
       { where: { id: id } }
     );
   },
 
-  deleteProduct: async (req, res) => {
+  deleteOne: async (req, res) => {
     const { id } = req.params;
     Product.destroy({
       where: { id: id },
     });
-    res.redirect('/admin/products');
   },
 };
 module.exports = ProductsController;

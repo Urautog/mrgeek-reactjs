@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
@@ -26,7 +26,9 @@ function LoginScreen() {
           <title>MrGeek | Login</title>
         </Helmet>
         <h1 className=" text-center my-3">LOGIN</h1>
-        {context.loginFailed ? <MessageBox /> : null}
+        {context.loginFailed ? (
+          <MessageBox variant="danger">Email ou senha inválidos!</MessageBox>
+        ) : null}
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3 input-wrapper" controlId="email">
             <Form.Label>Email</Form.Label>

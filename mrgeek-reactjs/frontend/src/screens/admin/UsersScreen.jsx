@@ -6,12 +6,15 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
+import Toast from 'react-bootstrap/Toast';
 
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
 
 function UsersScreen() {
   const navigate = useNavigate();
+  const [showA, setShowA] = useState(false);
+  const toggleShowA = () => setShowA(!showA);
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(null);
@@ -35,6 +38,12 @@ function UsersScreen() {
       });
   }
 
+  const deleteUser = (user_id) => {
+    axios.delete(`/admin/delete/${user_id}`);
+    toggleShowA();
+    navigate('/admin/products');
+  };
+
   useEffect(() => {
     getUsers();
     setLoading(false);
@@ -51,6 +60,16 @@ function UsersScreen() {
         ) : (
           <Row>
             <Col>
+              <Toast
+                show={showA}
+                onClose={toggleShowA}
+                delay={2000}
+                autohide
+                bg="warning"
+                className="mx-auto text-center"
+              >
+                <Toast.Body>Usuário excluído!</Toast.Body>
+              </Toast>
               <Table striped bordered hover variant="success" size="sm">
                 <thead className="text-center">
                   <tr>
@@ -74,11 +93,7 @@ function UsersScreen() {
                         <Button
                           variant="danger"
                           onClick={() => {
-                            axios
-                              .delete(`/admin/delete/${user.id}`)
-                              .then(() => {
-                                navigate('/admin/users');
-                              });
+                            deleteUser(user.id);
                           }}
                         >
                           Excluir

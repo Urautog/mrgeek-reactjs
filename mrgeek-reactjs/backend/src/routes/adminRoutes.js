@@ -15,6 +15,6 @@ router.post(
   ProductController.new
 );
 router.post('/delete-user/:id', UserController.deleteUser);
-router.post('/delete-product/:id', ProductController.deleteProduct);
+// router.post('/delete-product/:id', ProductController.deleteProduct);
 
 module.exports = router;

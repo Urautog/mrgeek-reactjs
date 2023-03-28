@@ -11,8 +11,11 @@ const UserController = {
     const { id } = req.params;
     User.destroy({ where: { id: id } });
   },
-  showMeusDados: (req, res) => {
-    res.render('meus-dados');
+  getUser: async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    const userAddresses = await Address.findAll({ where: { user_id: id } });
+    res.json({ user, userAddresses });
   },
   new: async (req, res) => {
     if (req.body.firstName && req.body.password) {
@@ -32,6 +35,7 @@ const UserController = {
       } = req.body;
       const hash = bcrypt.hashSync(password, 10);
       const userUUID = randomUUID();
+      console.log(userUUID);
       await User.create({
         id: userUUID,
         firstName,
@@ -40,6 +44,8 @@ const UserController = {
         tel,
         password: hash,
       });
+      console.log(userUUID);
+
       await Address.create({
         id: randomUUID(),
         zipcode,
@@ -66,6 +72,15 @@ const UserController = {
     User.destroy({
       where: { id: id },
     });
+  },
+  getAddresses: async (req, res) => {
+    const { id } = req.params;
+    const userAddresses = await User.findAll({
+      where: {
+        user_id: id,
+      },
+    });
+    res.json(userAddresses);
   },
 };
 

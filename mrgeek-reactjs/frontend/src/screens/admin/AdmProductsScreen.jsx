@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import LoadingBox from '../../components/LoadingBox';
 import MessageBox from '../../components/MessageBox';
-import Button from 'react-bootstrap/esm/Button';
-import { Link } from 'react-router-dom';
-import Container from 'react-bootstrap/esm/Container';
+import Button from 'react-bootstrap/Button';
+import { Link, useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -23,6 +23,7 @@ const reducer = (state, action) => {
 };
 
 function AdmProductsScreen() {
+  const navigate = useNavigate();
   const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     products: [],
     loading: true,
@@ -67,6 +68,7 @@ function AdmProductsScreen() {
                     <th>Imagem</th>
                     <th>Nome</th>
                     <th>Descrição</th>
+                    <th>Preço</th>
                     <th>Categoria</th>
                     <th>Estoque</th>
                     <th>Ativo</th>
@@ -88,16 +90,28 @@ function AdmProductsScreen() {
                       </th>
                       <th>{product.name}</th>
                       <th>{product.description}</th>
+                      <th>{product.price}</th>
                       <th>{product.category.name}</th>
                       <th>{product.stock}</th>
                       <th>{product.isActive ? 'Sim' : 'Não'}</th>
                       <th>
-                      <Link to={`/admin/products/update/${product.id}`}>
-                        <Button variant="warning" className="m-2">
-                          Editar
-                        </Button>
+                        <Link to={`/admin/products/update/${product.id}`}>
+                          <Button variant="warning" className="m-2">
+                            Editar
+                          </Button>
                         </Link>
-                        <Button variant="danger">Excluir</Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => {
+                            axios
+                              .delete(`/admin/product/delete/${product.id}`)
+                              .then(() => {
+                                navigate('/admin/products');
+                              });
+                          }}
+                        >
+                          Excluir
+                        </Button>
                       </th>
                     </tr>
                   ))}

@@ -9,7 +9,7 @@ router.get('/users', UserController.index);
 
 // router.get('/favoritos', UserController.showFavoritos);
 
-router.get('/meus-dados', UserController.showMeusDados);
+router.get('/users/:id', UserController.getUser);
 
 router.post('/register', UserController.new);
 

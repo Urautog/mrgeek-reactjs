@@ -12,9 +12,10 @@ import MessageBox from '../../components/MessageBox';
 import NewCategoryForm from '../../components/NewCategoryForm';
 
 function UpdateProductScreen() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [stock, setStock] = useState('');
   const [isActive, setIsActive] = useState('');
   const [description, setDescription] = useState('');
@@ -24,6 +25,10 @@ function UpdateProductScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState({});
   const { id } = useParams();
+
+  const handleChange = () => {
+    setIsActive(!isActive);
+  };
 
   function getCategories() {
     axios
@@ -44,6 +49,12 @@ function UpdateProductScreen() {
       .then((res) => {
         setProduct(res.data);
         console.log(res.data);
+        setName(res.data.name);
+        setPrice(res.data.price);
+        setDescription(res.data.description);
+        setStock(res.data.stock);
+        setIsActive(res.data.isActive);
+        setCategory(res.data.category_id);
       })
       .catch((err) => {
         setError(err);
@@ -63,7 +74,7 @@ function UpdateProductScreen() {
       const data = new FormData();
 
       data.append('name', name);
-      data.append('image', image);
+      // data.append('image', image);
       data.append('description', description);
       data.append('price', price);
       data.append('category', category);
@@ -75,6 +86,7 @@ function UpdateProductScreen() {
           'Content-Type': 'multipart/ form-data',
         },
       });
+      navigate('/admin/products');
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +136,7 @@ function UpdateProductScreen() {
                 </FloatingLabel>
               </Form.Group>
 
-              <Form.Group
+              {/* <Form.Group
                 controlId="image"
                 className="my-3 text-center input-wrapper"
               >
@@ -142,7 +154,7 @@ function UpdateProductScreen() {
                     }}
                   />
                 </FloatingLabel>
-              </Form.Group>
+              </Form.Group> */}
 
               <Row className="select-wrapper">
                 {product && product.category && (
@@ -183,7 +195,7 @@ function UpdateProductScreen() {
                     type="number"
                     step="1"
                     required
-                    value={product.stock}
+                    defaultValue={product.stock}
                     onChange={(e) => setStock(e.target.value)}
                   />
                 </FloatingLabel>
@@ -194,9 +206,10 @@ function UpdateProductScreen() {
                   id="custom-switch"
                   label="Ativo"
                   className="mb-3"
-                  // checked
-                  onChange={(e) => setIsActive(e.target.value)}
-                  checked={product.isActive ? true : false}
+                  value={isActive}
+                  onChange={handleChange}
+                  // onChange={(e) => setIsActive(e.target.value)}
+                  // checked={product.isActive ? true : false}
                 />
               </Form.Group>
 
@@ -222,7 +235,7 @@ function UpdateProductScreen() {
 
               <div className="d-grid gap-2">
                 <Button type="submit" className="mb-2 mx-5">
-                  Cadastrar
+                  Atualizar
                 </Button>
                 <Button variant="danger" className="mb-2 mx-5">
                   Limpar

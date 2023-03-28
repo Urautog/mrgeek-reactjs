@@ -5,25 +5,21 @@ import HomeScreen from './screens/HomeScreen';
 import ProductScreen from './screens/ProductScreen';
 import ProductsScreen from './screens/ProductsScreen';
 import LoginScreen from './screens/LoginScreen';
-import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Helmet } from 'react-helmet-async';
-import { useContext } from 'react';
-import { Store } from './Store';
 import RegisterScreen from './screens/RegisterScreen';
 import OrdersScreen from './screens/OrdersScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import AdmProductScreen from './screens/admin/AdmProductsScreen';
-import NewProduct from './screens/admin/NewProductScreen';
 import NewProductScreen from './screens/admin/NewProductScreen';
 import UsersScreen from './screens/admin/UsersScreen';
-import CheckoutScreen from './screens/CheckoutScreen';
 import UpdateProductScreen from './screens/admin/UpdateProductScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import CartScreen from './screens/CartScreen';
 import AuthProvider from './contexts/AuthContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
+import OrderNumberScreen from './screens/OrderNumberScreen';
+import PrivateRoutes from './components/PrivateRoutes';
 
 function App() {
   return (
@@ -39,21 +35,25 @@ function App() {
           <main className="bg-light-pink">
             <Container>
               <Routes>
-                <Route path="/profile" element={<ProfileScreen />} />
+                <Route path="/profile/:id" element={<ProfileScreen />} />
                 <Route path="/products" element={<ProductsScreen />} />
                 <Route path="/product/:id" element={<ProductScreen />} />
                 <Route path="/" element={<HomeScreen />} />
-                <Route path="/orders" element={<OrdersScreen />} />
-                <Route path="/checkout" element={<CheckoutScreen />} />
-                <Route path="/cart" element={<CartScreen />} />
+                <Route path="/profile/orders" element={<OrdersScreen />} />
+
+                <Route path="/" element={<PrivateRoutes />}>
+                  <Route path="cart" element={<CartScreen />} />
+                </Route>
+
                 <Route path="/favorites" element={<FavoritesScreen />} />
                 <Route path="/register" element={<RegisterScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
+                <Route
+                  path="/order-number/:id"
+                  element={<OrderNumberScreen />}
+                />
                 <Route path="/" element={<ProtectedRoutes />}>
-                  <Route
-                    path="admin/products"
-                    element={<AdmProductScreen />}
-                  />
+                  <Route path="admin/products" element={<AdmProductScreen />} />
                   <Route
                     path="admin/products/update/:id"
                     element={<UpdateProductScreen />}

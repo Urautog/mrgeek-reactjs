@@ -1,30 +1,173 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-import { Link } from 'react-router-dom';
-import FavoriteCard from '../components/FavoriteCard';
-import ListGroup from 'react-bootstrap/ListGroup';
+import MessageBox from '../components/MessageBox';
+// import { useJwt } from 'react-jwt';
+import { useNavigate } from 'react-router-dom';
+import CurrencyInput from 'react-currency-input-field';
 
-
+import axios from 'axios';
 
 function CartScreen() {
+  const navigate = useNavigate();
+
+  // const { decodedToken, isExpired } = useJwt(sessionStorage.getItem('token'));
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('items'))) {
+      setItems(JSON.parse(localStorage.getItem('items')));
+    }
+  }, []);
+
+  const deleteItemHandler = (items, id) => {
+    const newArr = items.filter((item) => item.id !== id);
+    setItems(newArr);
+    localStorage.setItem('items', JSON.stringify(newArr));
+  };
+
+  const submitOrder = (items, user) => {
+    let order = [];
+    console.log(items);
+    order = items.map((item) => {
+      return { product_id: item.id };
+    });
+    axios
+      .post(
+        'http://localhost:5000/orders',
+        { order },
+        {
+          headers: {
+            Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+          },
+        }
+      )
+      .then((res) => {
+        navigate(`/order-number/${res.data.order_id}`);
+        localStorage.clear();
+      });
+  };
+
   return (
-    <div>
+    <div className="my-3 text-center">
       <h1>Carrinho</h1>
-      <Row>
-        <Col md={8}>
-          <ListGroup>
-            <ListGroup>
-              <Row className="align-items-center">
-                <Col md={4}></Col>
-              </Row>
-            </ListGroup>
-          </ListGroup>
-        </Col>
-        <Col md={4}></Col>
+      <Row className="align-items-flex-start">
+        {items.length > 0 ? (
+          <>
+            <Col className="" md={8}>
+              {items.map((item) => (
+                <Card
+                  className="mb-3"
+                  key={item.id}
+                  style={{ border: '1px solid black' }}
+                >
+                  <Row className="align-items-center py-2">
+                    <Col md={2} className="">
+                      <img
+                        style={{ height: '70px', width: '70px' }}
+                        src={`../public/productsImages/${item.image}`}
+                        className=""
+                        alt={item.name}
+                      ></img>
+                    </Col>
+                    <Col md={4}>
+                      <Card.Title>{item.name}</Card.Title>
+                      <Card.Text>{item.description}</Card.Text>
+                    </Col>
+                    <Col md={3}>
+                      <Card.Text>
+                        <CurrencyInput
+                          prefix="R$"
+                          allowDecimals={true}
+                          value={item.price}
+                          defaultValue={0}
+                          decimalsLimit={2}
+                          decimalSeparator=","
+                          fixedDecimalLength="2"
+                          style={{ border: 'none' }}
+                        />
+                      </Card.Text>
+                    </Col>
+                    <Col md={3}>
+                      <Button
+                        onClick={() => {
+                          deleteItemHandler(items, item.id);
+                        }}
+                        variant="danger"
+                      >
+                        Remover
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card>
+              ))}
+            </Col>
+            <Col md={4}>
+              <Card style={{ border: '1px solid black' }}>
+                <Card.Title>Finalizar Pedido</Card.Title>
+                <Card.Body>
+                  <Card.Text>
+                    Subtotal:
+                    <CurrencyInput
+                      prefix="R$"
+                      allowDecimals={true}
+                      value={items
+                        .map((item) => item.price)
+                        .reduce((prev, curr) => prev + curr, 0)}
+                      defaultValue={0}
+                      decimalsLimit={2}
+                      decimalSeparator=","
+                      fixedDecimalLength="2"
+                      style={{ border: 'none' }}
+                    />
+                  </Card.Text>
+                  <Card.Text>
+                    Frete:{' '}
+                    <CurrencyInput
+                      prefix="R$"
+                      allowDecimals={true}
+                      value={'12'}
+                      defaultValue={0}
+                      decimalsLimit={2}
+                      decimalSeparator=","
+                      fixedDecimalLength={2}
+                      style={{ border: 'none' }}
+                    />{' '}
+                  </Card.Text>
+                  <Card.Text>
+                    Total:{' '}
+                    <CurrencyInput
+                      prefix="R$"
+                      allowDecimals={true}
+                      value={
+                        items
+                          .map((item) => item.price)
+                          .reduce((prev, curr) => prev + curr, 0) + 12
+                      }
+                      defaultValue={0}
+                      decimalsLimit={2}
+                      decimalSeparator=","
+                      fixedDecimalLength={2}
+                      style={{ border: 'none' }}
+                    />
+                  </Card.Text>
+                  <Button
+                    onClick={() => {
+                      submitOrder(items);
+                    }}
+                  >
+                    Finalizar Pedido
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </>
+        ) : (
+          <MessageBox>Seu carrinho está vazio!</MessageBox>
+        )}
       </Row>
     </div>
   );

@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function FavoriteCard(props) {
-  const { product } = props;
+  // const { product } = props;
 
   return (
     <Link to="/" className='text-decoration-none text-reset'>
